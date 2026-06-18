@@ -1,0 +1,210 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* PRAN — Evidence Intelligence
+ * Scholarly paper, ink, archival warmth. Editorial serif + neutral sans + mono metadata.
+ * No medical clichés. Tokens only — never hardcode colors in components.
+ */
+
+@theme inline {
+  --font-display: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Evidence tier semantics */
+  --color-tier-meta: var(--tier-meta);     /* meta-analysis — ember */
+  --color-tier-rct: var(--tier-rct);       /* randomized trial — ink */
+  --color-tier-cohort: var(--tier-cohort); /* cohort — slate */
+  --color-tier-case: var(--tier-case);     /* case report — mute */
+  --color-tier-guide: var(--tier-guide);   /* guideline — moss */
+
+  --color-conflict: var(--conflict);
+  --color-consensus: var(--consensus);
+
+  --shadow-paper: 0 1px 0 0 color-mix(in oklab, var(--ink) 4%, transparent),
+                  0 8px 24px -16px color-mix(in oklab, var(--ink) 18%, transparent);
+  --shadow-lift: 0 1px 0 0 color-mix(in oklab, var(--ink) 5%, transparent),
+                 0 24px 64px -28px color-mix(in oklab, var(--ink) 24%, transparent);
+  --shadow-dock: 0 24px 60px -20px color-mix(in oklab, var(--ink) 35%, transparent),
+                 0 2px 0 0 color-mix(in oklab, var(--ink) 8%, transparent);
+}
+
+:root {
+  --radius: 0.5rem;
+
+  --paper: oklch(0.985 0.006 80);          /* warm archival paper */
+  --paper-2: oklch(0.965 0.01 80);
+  --ink: oklch(0.18 0.012 250);            /* near-black with cool tilt */
+  --ink-2: oklch(0.38 0.012 250);
+  --ink-3: oklch(0.58 0.012 250);
+  --rule: oklch(0.18 0.012 250 / 0.08);
+  --rule-strong: oklch(0.18 0.012 250 / 0.18);
+
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: oklch(0.995 0.004 80);
+  --card-foreground: var(--ink);
+  --popover: oklch(0.995 0.004 80);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --secondary: var(--paper-2);
+  --secondary-foreground: var(--ink);
+  --muted: var(--paper-2);
+  --muted-foreground: var(--ink-3);
+  --accent: oklch(0.55 0.16 38);           /* ember */
+  --accent-foreground: var(--paper);
+  --destructive: oklch(0.55 0.2 25);
+  --destructive-foreground: var(--paper);
+  --border: var(--rule);
+  --input: var(--rule);
+  --ring: oklch(0.55 0.16 38 / 0.4);
+
+  --tier-meta: oklch(0.58 0.17 38);        /* ember */
+  --tier-rct: oklch(0.22 0.012 250);       /* ink */
+  --tier-cohort: oklch(0.5 0.06 240);      /* slate */
+  --tier-case: oklch(0.65 0.012 80);       /* warm grey */
+  --tier-guide: oklch(0.52 0.07 165);      /* moss */
+  --conflict: oklch(0.6 0.18 28);
+  --consensus: oklch(0.55 0.1 160);
+}
+
+.dark {
+  --paper: oklch(0.14 0.01 250);
+  --paper-2: oklch(0.18 0.01 250);
+  --ink: oklch(0.96 0.005 80);
+  --ink-2: oklch(0.78 0.01 80);
+  --ink-3: oklch(0.58 0.01 80);
+  --rule: oklch(0.96 0.005 80 / 0.1);
+  --rule-strong: oklch(0.96 0.005 80 / 0.22);
+
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: oklch(0.2 0.01 250);
+  --card-foreground: var(--ink);
+  --popover: oklch(0.2 0.01 250);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --secondary: var(--paper-2);
+  --secondary-foreground: var(--ink);
+  --muted: var(--paper-2);
+  --muted-foreground: var(--ink-3);
+  --accent: oklch(0.7 0.15 45);
+  --accent-foreground: var(--paper);
+  --destructive: oklch(0.65 0.2 25);
+  --destructive-foreground: var(--paper);
+  --border: var(--rule);
+  --input: var(--rule);
+  --ring: oklch(0.7 0.15 45 / 0.5);
+
+  --tier-meta: oklch(0.72 0.16 45);
+  --tier-rct: oklch(0.92 0.01 80);
+  --tier-cohort: oklch(0.7 0.08 235);
+  --tier-case: oklch(0.55 0.01 80);
+  --tier-guide: oklch(0.72 0.1 165);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html, body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection { background: color-mix(in oklab, var(--accent) 25%, transparent); }
+}
+
+/* Reusable utilities expressing the visual language */
+@utility font-display {
+  font-family: var(--font-display);
+  font-feature-settings: "liga", "dlig";
+  letter-spacing: -0.01em;
+}
+@utility font-mono {
+  font-family: var(--font-mono);
+}
+@utility paper-grid {
+  background-image:
+    radial-gradient(circle at 1px 1px, color-mix(in oklab, var(--ink) 14%, transparent) 1px, transparent 0);
+  background-size: 28px 28px;
+}
+@utility paper-lines {
+  background-image:
+    linear-gradient(to bottom, transparent 31px, color-mix(in oklab, var(--ink) 8%, transparent) 31px, color-mix(in oklab, var(--ink) 8%, transparent) 32px, transparent 32px);
+  background-size: 100% 32px;
+}
+@utility hairline {
+  box-shadow: inset 0 0 0 1px var(--rule);
+}
+@utility hairline-strong {
+  box-shadow: inset 0 0 0 1px var(--rule-strong);
+}
+@utility chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  box-shadow: inset 0 0 0 1px var(--rule-strong);
+}
+@utility mono-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+@utility serif-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
+  line-height: 0.95;
+}
