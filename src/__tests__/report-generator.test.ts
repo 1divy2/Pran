@@ -1,8 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  generateTopicReport,
-  generateReportFromNormalized,
-} from "@/lib/report-generator";
+import { generateTopicReport, generateReportFromNormalized } from "@/lib/report-generator";
 import type { EvidencePiece } from "@/lib/evidence";
 import type { NormalizedEvidence } from "@/lib/ingestion/types";
 
@@ -50,9 +47,20 @@ function mockNormalized(overrides: Partial<NormalizedEvidence> = {}): Normalized
 describe("generateTopicReport", () => {
   it("generates a complete report with all sections", () => {
     const evidence = [
-      mockEvidence({ id: "1", tier: "meta-analysis", confidence: 95, title: "Meta-analysis of statins" }),
+      mockEvidence({
+        id: "1",
+        tier: "meta-analysis",
+        confidence: 95,
+        title: "Meta-analysis of statins",
+      }),
       mockEvidence({ id: "2", tier: "rct", confidence: 82 }),
-      mockEvidence({ id: "3", tier: "cohort", confidence: 55, year: 2020, source: "ClinicalTrials.gov" }),
+      mockEvidence({
+        id: "3",
+        tier: "cohort",
+        confidence: 55,
+        year: 2020,
+        source: "ClinicalTrials.gov",
+      }),
     ];
 
     const report = generateTopicReport("hypertension", "Hypertension Treatment", evidence);

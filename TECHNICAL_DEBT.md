@@ -1,6 +1,7 @@
 # TECHNICAL_DEBT.md
 
 ## Identified Technical Debt
+
 1. **Large Monolithic Components**
    - `src/components/EvidenceTable.tsx` contains >500 lines with mixed UI and data processing logic.
    - Recommendation: Split into smaller presentational components and a hook for data handling.
@@ -22,13 +23,14 @@
    - Recommendation: Introduce Vitest tests for critical business‑logic utilities.
 
 ## Risk Assessment
+
 - **High**: Monolithic UI components may hinder future scalability.
 - **Medium**: Styling inconsistencies could affect brand consistency.
 - **Low**: Current CI ensures type safety; no immediate breaking risk.
 
 ## Action Plan
+
 - Refactor large components into smaller units (next sprint).
 - Create a design‑system stylesheet (`src/styles/design-system.css`).
 - Add Vitest tests for `src/lib/evidence.ts` and routing logic.
 - Evaluate bundle size using `vite build --mode production` and set performance budgets.
-

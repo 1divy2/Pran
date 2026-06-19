@@ -9,48 +9,30 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TimelineRouteImport } from './routes/timeline'
-import { Route as PyramidRouteImport } from './routes/pyramid'
-import { Route as GuidelinesRouteImport } from './routes/guidelines'
-import { Route as GraphRouteImport } from './routes/graph'
-import { Route as CourtroomRouteImport } from './routes/courtroom'
-import { Route as ConflictsRouteImport } from './routes/conflicts'
-import { Route as CanvasRouteImport } from './routes/canvas'
+import { Route as SearchRouteImport } from './routes/search'
+import { Route as CompareRouteImport } from './routes/compare'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminRateLimitsRouteImport } from './routes/admin.rate-limits'
+import { Route as AdminErrorsRouteImport } from './routes/admin.errors'
+import { Route as TopicTopicIdIndexRouteImport } from './routes/topic.$topicId.index'
+import { Route as TopicTopicIdTimelineRouteImport } from './routes/topic.$topicId.timeline'
+import { Route as TopicTopicIdSafetyRouteImport } from './routes/topic.$topicId.safety'
+import { Route as TopicTopicIdPyramidRouteImport } from './routes/topic.$topicId.pyramid'
+import { Route as TopicTopicIdGuidelinesRouteImport } from './routes/topic.$topicId.guidelines'
+import { Route as TopicTopicIdGraphRouteImport } from './routes/topic.$topicId.graph'
+import { Route as TopicTopicIdCourtroomRouteImport } from './routes/topic.$topicId.courtroom'
+import { Route as TopicTopicIdConflictsRouteImport } from './routes/topic.$topicId.conflicts'
+import { Route as TopicTopicIdCanvasRouteImport } from './routes/topic.$topicId.canvas'
 
-const TimelineRoute = TimelineRouteImport.update({
-  id: '/timeline',
-  path: '/timeline',
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PyramidRoute = PyramidRouteImport.update({
-  id: '/pyramid',
-  path: '/pyramid',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GuidelinesRoute = GuidelinesRouteImport.update({
-  id: '/guidelines',
-  path: '/guidelines',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GraphRoute = GraphRouteImport.update({
-  id: '/graph',
-  path: '/graph',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CourtroomRoute = CourtroomRouteImport.update({
-  id: '/courtroom',
-  path: '/courtroom',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConflictsRoute = ConflictsRouteImport.update({
-  id: '/conflicts',
-  path: '/conflicts',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CanvasRoute = CanvasRouteImport.update({
-  id: '/canvas',
-  path: '/canvas',
+const CompareRoute = CompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -58,131 +40,205 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/admin/settings',
+  path: '/admin/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRateLimitsRoute = AdminRateLimitsRouteImport.update({
+  id: '/admin/rate-limits',
+  path: '/admin/rate-limits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminErrorsRoute = AdminErrorsRouteImport.update({
+  id: '/admin/errors',
+  path: '/admin/errors',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TopicTopicIdIndexRoute = TopicTopicIdIndexRouteImport.update({
+  id: '/topic/$topicId/',
+  path: '/topic/$topicId/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TopicTopicIdTimelineRoute = TopicTopicIdTimelineRouteImport.update({
+  id: '/topic/$topicId/timeline',
+  path: '/topic/$topicId/timeline',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TopicTopicIdSafetyRoute = TopicTopicIdSafetyRouteImport.update({
+  id: '/topic/$topicId/safety',
+  path: '/topic/$topicId/safety',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TopicTopicIdPyramidRoute = TopicTopicIdPyramidRouteImport.update({
+  id: '/topic/$topicId/pyramid',
+  path: '/topic/$topicId/pyramid',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TopicTopicIdGuidelinesRoute = TopicTopicIdGuidelinesRouteImport.update({
+  id: '/topic/$topicId/guidelines',
+  path: '/topic/$topicId/guidelines',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TopicTopicIdGraphRoute = TopicTopicIdGraphRouteImport.update({
+  id: '/topic/$topicId/graph',
+  path: '/topic/$topicId/graph',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TopicTopicIdCourtroomRoute = TopicTopicIdCourtroomRouteImport.update({
+  id: '/topic/$topicId/courtroom',
+  path: '/topic/$topicId/courtroom',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TopicTopicIdConflictsRoute = TopicTopicIdConflictsRouteImport.update({
+  id: '/topic/$topicId/conflicts',
+  path: '/topic/$topicId/conflicts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TopicTopicIdCanvasRoute = TopicTopicIdCanvasRouteImport.update({
+  id: '/topic/$topicId/canvas',
+  path: '/topic/$topicId/canvas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/canvas': typeof CanvasRoute
-  '/conflicts': typeof ConflictsRoute
-  '/courtroom': typeof CourtroomRoute
-  '/graph': typeof GraphRoute
-  '/guidelines': typeof GuidelinesRoute
-  '/pyramid': typeof PyramidRoute
-  '/timeline': typeof TimelineRoute
+  '/compare': typeof CompareRoute
+  '/search': typeof SearchRoute
+  '/admin/errors': typeof AdminErrorsRoute
+  '/admin/rate-limits': typeof AdminRateLimitsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/topic/$topicId/canvas': typeof TopicTopicIdCanvasRoute
+  '/topic/$topicId/conflicts': typeof TopicTopicIdConflictsRoute
+  '/topic/$topicId/courtroom': typeof TopicTopicIdCourtroomRoute
+  '/topic/$topicId/graph': typeof TopicTopicIdGraphRoute
+  '/topic/$topicId/guidelines': typeof TopicTopicIdGuidelinesRoute
+  '/topic/$topicId/pyramid': typeof TopicTopicIdPyramidRoute
+  '/topic/$topicId/safety': typeof TopicTopicIdSafetyRoute
+  '/topic/$topicId/timeline': typeof TopicTopicIdTimelineRoute
+  '/topic/$topicId/': typeof TopicTopicIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/canvas': typeof CanvasRoute
-  '/conflicts': typeof ConflictsRoute
-  '/courtroom': typeof CourtroomRoute
-  '/graph': typeof GraphRoute
-  '/guidelines': typeof GuidelinesRoute
-  '/pyramid': typeof PyramidRoute
-  '/timeline': typeof TimelineRoute
+  '/compare': typeof CompareRoute
+  '/search': typeof SearchRoute
+  '/admin/errors': typeof AdminErrorsRoute
+  '/admin/rate-limits': typeof AdminRateLimitsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/topic/$topicId/canvas': typeof TopicTopicIdCanvasRoute
+  '/topic/$topicId/conflicts': typeof TopicTopicIdConflictsRoute
+  '/topic/$topicId/courtroom': typeof TopicTopicIdCourtroomRoute
+  '/topic/$topicId/graph': typeof TopicTopicIdGraphRoute
+  '/topic/$topicId/guidelines': typeof TopicTopicIdGuidelinesRoute
+  '/topic/$topicId/pyramid': typeof TopicTopicIdPyramidRoute
+  '/topic/$topicId/safety': typeof TopicTopicIdSafetyRoute
+  '/topic/$topicId/timeline': typeof TopicTopicIdTimelineRoute
+  '/topic/$topicId': typeof TopicTopicIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/canvas': typeof CanvasRoute
-  '/conflicts': typeof ConflictsRoute
-  '/courtroom': typeof CourtroomRoute
-  '/graph': typeof GraphRoute
-  '/guidelines': typeof GuidelinesRoute
-  '/pyramid': typeof PyramidRoute
-  '/timeline': typeof TimelineRoute
+  '/compare': typeof CompareRoute
+  '/search': typeof SearchRoute
+  '/admin/errors': typeof AdminErrorsRoute
+  '/admin/rate-limits': typeof AdminRateLimitsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/topic/$topicId/canvas': typeof TopicTopicIdCanvasRoute
+  '/topic/$topicId/conflicts': typeof TopicTopicIdConflictsRoute
+  '/topic/$topicId/courtroom': typeof TopicTopicIdCourtroomRoute
+  '/topic/$topicId/graph': typeof TopicTopicIdGraphRoute
+  '/topic/$topicId/guidelines': typeof TopicTopicIdGuidelinesRoute
+  '/topic/$topicId/pyramid': typeof TopicTopicIdPyramidRoute
+  '/topic/$topicId/safety': typeof TopicTopicIdSafetyRoute
+  '/topic/$topicId/timeline': typeof TopicTopicIdTimelineRoute
+  '/topic/$topicId/': typeof TopicTopicIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/canvas'
-    | '/conflicts'
-    | '/courtroom'
-    | '/graph'
-    | '/guidelines'
-    | '/pyramid'
-    | '/timeline'
+    | '/compare'
+    | '/search'
+    | '/admin/errors'
+    | '/admin/rate-limits'
+    | '/admin/settings'
+    | '/topic/$topicId/canvas'
+    | '/topic/$topicId/conflicts'
+    | '/topic/$topicId/courtroom'
+    | '/topic/$topicId/graph'
+    | '/topic/$topicId/guidelines'
+    | '/topic/$topicId/pyramid'
+    | '/topic/$topicId/safety'
+    | '/topic/$topicId/timeline'
+    | '/topic/$topicId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/canvas'
-    | '/conflicts'
-    | '/courtroom'
-    | '/graph'
-    | '/guidelines'
-    | '/pyramid'
-    | '/timeline'
+    | '/compare'
+    | '/search'
+    | '/admin/errors'
+    | '/admin/rate-limits'
+    | '/admin/settings'
+    | '/topic/$topicId/canvas'
+    | '/topic/$topicId/conflicts'
+    | '/topic/$topicId/courtroom'
+    | '/topic/$topicId/graph'
+    | '/topic/$topicId/guidelines'
+    | '/topic/$topicId/pyramid'
+    | '/topic/$topicId/safety'
+    | '/topic/$topicId/timeline'
+    | '/topic/$topicId'
   id:
     | '__root__'
     | '/'
-    | '/canvas'
-    | '/conflicts'
-    | '/courtroom'
-    | '/graph'
-    | '/guidelines'
-    | '/pyramid'
-    | '/timeline'
+    | '/compare'
+    | '/search'
+    | '/admin/errors'
+    | '/admin/rate-limits'
+    | '/admin/settings'
+    | '/topic/$topicId/canvas'
+    | '/topic/$topicId/conflicts'
+    | '/topic/$topicId/courtroom'
+    | '/topic/$topicId/graph'
+    | '/topic/$topicId/guidelines'
+    | '/topic/$topicId/pyramid'
+    | '/topic/$topicId/safety'
+    | '/topic/$topicId/timeline'
+    | '/topic/$topicId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  CanvasRoute: typeof CanvasRoute
-  ConflictsRoute: typeof ConflictsRoute
-  CourtroomRoute: typeof CourtroomRoute
-  GraphRoute: typeof GraphRoute
-  GuidelinesRoute: typeof GuidelinesRoute
-  PyramidRoute: typeof PyramidRoute
-  TimelineRoute: typeof TimelineRoute
+  CompareRoute: typeof CompareRoute
+  SearchRoute: typeof SearchRoute
+  AdminErrorsRoute: typeof AdminErrorsRoute
+  AdminRateLimitsRoute: typeof AdminRateLimitsRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  TopicTopicIdCanvasRoute: typeof TopicTopicIdCanvasRoute
+  TopicTopicIdConflictsRoute: typeof TopicTopicIdConflictsRoute
+  TopicTopicIdCourtroomRoute: typeof TopicTopicIdCourtroomRoute
+  TopicTopicIdGraphRoute: typeof TopicTopicIdGraphRoute
+  TopicTopicIdGuidelinesRoute: typeof TopicTopicIdGuidelinesRoute
+  TopicTopicIdPyramidRoute: typeof TopicTopicIdPyramidRoute
+  TopicTopicIdSafetyRoute: typeof TopicTopicIdSafetyRoute
+  TopicTopicIdTimelineRoute: typeof TopicTopicIdTimelineRoute
+  TopicTopicIdIndexRoute: typeof TopicTopicIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/timeline': {
-      id: '/timeline'
-      path: '/timeline'
-      fullPath: '/timeline'
-      preLoaderRoute: typeof TimelineRouteImport
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/pyramid': {
-      id: '/pyramid'
-      path: '/pyramid'
-      fullPath: '/pyramid'
-      preLoaderRoute: typeof PyramidRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/guidelines': {
-      id: '/guidelines'
-      path: '/guidelines'
-      fullPath: '/guidelines'
-      preLoaderRoute: typeof GuidelinesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/graph': {
-      id: '/graph'
-      path: '/graph'
-      fullPath: '/graph'
-      preLoaderRoute: typeof GraphRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/courtroom': {
-      id: '/courtroom'
-      path: '/courtroom'
-      fullPath: '/courtroom'
-      preLoaderRoute: typeof CourtroomRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/conflicts': {
-      id: '/conflicts'
-      path: '/conflicts'
-      fullPath: '/conflicts'
-      preLoaderRoute: typeof ConflictsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/canvas': {
-      id: '/canvas'
-      path: '/canvas'
-      fullPath: '/canvas'
-      preLoaderRoute: typeof CanvasRouteImport
+    '/compare': {
+      id: '/compare'
+      path: '/compare'
+      fullPath: '/compare'
+      preLoaderRoute: typeof CompareRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -192,18 +248,109 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/admin/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/rate-limits': {
+      id: '/admin/rate-limits'
+      path: '/admin/rate-limits'
+      fullPath: '/admin/rate-limits'
+      preLoaderRoute: typeof AdminRateLimitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/errors': {
+      id: '/admin/errors'
+      path: '/admin/errors'
+      fullPath: '/admin/errors'
+      preLoaderRoute: typeof AdminErrorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/topic/$topicId/': {
+      id: '/topic/$topicId/'
+      path: '/topic/$topicId'
+      fullPath: '/topic/$topicId/'
+      preLoaderRoute: typeof TopicTopicIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/topic/$topicId/timeline': {
+      id: '/topic/$topicId/timeline'
+      path: '/topic/$topicId/timeline'
+      fullPath: '/topic/$topicId/timeline'
+      preLoaderRoute: typeof TopicTopicIdTimelineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/topic/$topicId/safety': {
+      id: '/topic/$topicId/safety'
+      path: '/topic/$topicId/safety'
+      fullPath: '/topic/$topicId/safety'
+      preLoaderRoute: typeof TopicTopicIdSafetyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/topic/$topicId/pyramid': {
+      id: '/topic/$topicId/pyramid'
+      path: '/topic/$topicId/pyramid'
+      fullPath: '/topic/$topicId/pyramid'
+      preLoaderRoute: typeof TopicTopicIdPyramidRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/topic/$topicId/guidelines': {
+      id: '/topic/$topicId/guidelines'
+      path: '/topic/$topicId/guidelines'
+      fullPath: '/topic/$topicId/guidelines'
+      preLoaderRoute: typeof TopicTopicIdGuidelinesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/topic/$topicId/graph': {
+      id: '/topic/$topicId/graph'
+      path: '/topic/$topicId/graph'
+      fullPath: '/topic/$topicId/graph'
+      preLoaderRoute: typeof TopicTopicIdGraphRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/topic/$topicId/courtroom': {
+      id: '/topic/$topicId/courtroom'
+      path: '/topic/$topicId/courtroom'
+      fullPath: '/topic/$topicId/courtroom'
+      preLoaderRoute: typeof TopicTopicIdCourtroomRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/topic/$topicId/conflicts': {
+      id: '/topic/$topicId/conflicts'
+      path: '/topic/$topicId/conflicts'
+      fullPath: '/topic/$topicId/conflicts'
+      preLoaderRoute: typeof TopicTopicIdConflictsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/topic/$topicId/canvas': {
+      id: '/topic/$topicId/canvas'
+      path: '/topic/$topicId/canvas'
+      fullPath: '/topic/$topicId/canvas'
+      preLoaderRoute: typeof TopicTopicIdCanvasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  CanvasRoute: CanvasRoute,
-  ConflictsRoute: ConflictsRoute,
-  CourtroomRoute: CourtroomRoute,
-  GraphRoute: GraphRoute,
-  GuidelinesRoute: GuidelinesRoute,
-  PyramidRoute: PyramidRoute,
-  TimelineRoute: TimelineRoute,
+  CompareRoute: CompareRoute,
+  SearchRoute: SearchRoute,
+  AdminErrorsRoute: AdminErrorsRoute,
+  AdminRateLimitsRoute: AdminRateLimitsRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  TopicTopicIdCanvasRoute: TopicTopicIdCanvasRoute,
+  TopicTopicIdConflictsRoute: TopicTopicIdConflictsRoute,
+  TopicTopicIdCourtroomRoute: TopicTopicIdCourtroomRoute,
+  TopicTopicIdGraphRoute: TopicTopicIdGraphRoute,
+  TopicTopicIdGuidelinesRoute: TopicTopicIdGuidelinesRoute,
+  TopicTopicIdPyramidRoute: TopicTopicIdPyramidRoute,
+  TopicTopicIdSafetyRoute: TopicTopicIdSafetyRoute,
+  TopicTopicIdTimelineRoute: TopicTopicIdTimelineRoute,
+  TopicTopicIdIndexRoute: TopicTopicIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

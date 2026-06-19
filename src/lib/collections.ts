@@ -277,10 +277,7 @@ export function getCollectionsForEvidence(evidenceId: string): CollectionSummary
 /**
  * Search items within a collection by title, note, or tags.
  */
-export function searchCollection(
-  collectionId: string,
-  query: string,
-): CollectionItem[] {
+export function searchCollection(collectionId: string, query: string): CollectionItem[] {
   const collection = getCollection(collectionId);
   if (!collection) return [];
 
@@ -301,24 +298,17 @@ export function filterByTag(collectionId: string, tag: string): CollectionItem[]
   if (!collection) return [];
 
   const lower = tag.toLowerCase();
-  return collection.items.filter((item) =>
-    item.tags.some((t) => t.toLowerCase() === lower),
-  );
+  return collection.items.filter((item) => item.tags.some((t) => t.toLowerCase() === lower));
 }
 
 /**
  * Filter items by minimum rating.
  */
-export function filterByRating(
-  collectionId: string,
-  minRating: number,
-): CollectionItem[] {
+export function filterByRating(collectionId: string, minRating: number): CollectionItem[] {
   const collection = getCollection(collectionId);
   if (!collection) return [];
 
-  return collection.items.filter(
-    (item) => item.rating !== null && item.rating >= minRating,
-  );
+  return collection.items.filter((item) => item.rating !== null && item.rating >= minRating);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -358,7 +348,8 @@ export function exportToMarkdown(collectionId: string): string | null {
     lines.push(`- **URL:** ${evidence.url}`);
     if (item.note) lines.push(`- **Note:** ${item.note}`);
     if (item.tags.length > 0) lines.push(`- **Tags:** ${item.tags.join(", ")}`);
-    if (item.rating) lines.push(`- **Rating:** ${"★".repeat(item.rating)}${"☆".repeat(5 - item.rating)}`);
+    if (item.rating)
+      lines.push(`- **Rating:** ${"★".repeat(item.rating)}${"☆".repeat(5 - item.rating)}`);
     lines.push("");
   }
 

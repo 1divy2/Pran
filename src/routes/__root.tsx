@@ -8,6 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { initErrorMonitoring } from "@/lib/error-monitor";
 
 import appCss from "../styles.css?url";
 
@@ -110,6 +111,9 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
         {children}
         <Scripts />
       </body>
@@ -119,6 +123,10 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  useEffect(() => {
+    initErrorMonitoring();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

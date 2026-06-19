@@ -32,7 +32,7 @@ export default function Navbar() {
       aria-label="Main navigation"
       className={cn(
         "fixed inset-x-0 top-0 z-40 flex items-center justify-center px-4 py-2",
-        "backdrop-blur-xl border-b hairline-strong",
+        "border-b hairline-strong",
         "shadow-sm",
       )}
       style={{

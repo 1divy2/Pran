@@ -27,7 +27,9 @@ vi.stubGlobal("localStorage", {
   setItem: (key: string, value: string) => storage.set(key, value),
   removeItem: (key: string) => storage.delete(key),
   clear: () => storage.clear(),
-  get length() { return storage.size; },
+  get length() {
+    return storage.size;
+  },
   key: (index: number) => [...storage.keys()][index] ?? null,
 });
 
@@ -305,11 +307,15 @@ describe("Evidence Collections", () => {
   describe("exportToMarkdown", () => {
     it("exports a collection as markdown", () => {
       const col = createCollection("My Research", { description: "Key findings" });
-      addItem(col.id, mockEvidence({ id: "1", title: "Study A", tier: "meta-analysis", year: 2023 }), {
-        note: "Important",
-        tags: ["key"],
-        rating: 5,
-      });
+      addItem(
+        col.id,
+        mockEvidence({ id: "1", title: "Study A", tier: "meta-analysis", year: 2023 }),
+        {
+          note: "Important",
+          tags: ["key"],
+          rating: 5,
+        },
+      );
 
       const md = exportToMarkdown(col.id);
       expect(md).toContain("# My Research");
@@ -354,14 +360,22 @@ describe("Evidence Collections", () => {
   describe("getCollectionStats", () => {
     it("computes aggregate statistics", () => {
       const col = createCollection("Test");
-      addItem(col.id, mockEvidence({ id: "1", tier: "rct", source: "PubMed", year: 2023, confidence: 80 }), {
-        tags: ["key"],
-        rating: 5,
-      });
-      addItem(col.id, mockEvidence({ id: "2", tier: "cohort", source: "PubMed", year: 2024, confidence: 60 }), {
-        tags: ["key", "secondary"],
-        rating: 3,
-      });
+      addItem(
+        col.id,
+        mockEvidence({ id: "1", tier: "rct", source: "PubMed", year: 2023, confidence: 80 }),
+        {
+          tags: ["key"],
+          rating: 5,
+        },
+      );
+      addItem(
+        col.id,
+        mockEvidence({ id: "2", tier: "cohort", source: "PubMed", year: 2024, confidence: 60 }),
+        {
+          tags: ["key", "secondary"],
+          rating: 3,
+        },
+      );
 
       const stats = getCollectionStats(col.id);
       expect(stats).not.toBeNull();

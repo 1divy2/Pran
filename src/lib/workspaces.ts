@@ -21,7 +21,13 @@ export interface WorkspaceActivity {
   /** Unique activity ID */
   id: string;
   /** Type of activity */
-  type: "collection_created" | "collection_shared" | "annotation_added" | "member_joined" | "member_removed" | "report_generated";
+  type:
+    | "collection_created"
+    | "collection_shared"
+    | "annotation_added"
+    | "member_joined"
+    | "member_removed"
+    | "report_generated";
   /** Who performed the action */
   actor: string;
   /** Human-readable description */
@@ -68,9 +74,20 @@ export interface WorkspaceSummary {
 const STORAGE_KEY = "pran-workspaces";
 const MAX_WORKSPACES = 20;
 const MEMBER_COLORS = [
-  "#6366f1", "#8b5cf6", "#a855f7", "#d946ef", "#ec4899",
-  "#f43f5e", "#ef4444", "#f97316", "#eab308", "#22c55e",
-  "#14b8a6", "#06b6d4", "#3b82f6", "#6366f1",
+  "#6366f1",
+  "#8b5cf6",
+  "#a855f7",
+  "#d946ef",
+  "#ec4899",
+  "#f43f5e",
+  "#ef4444",
+  "#f97316",
+  "#eab308",
+  "#22c55e",
+  "#14b8a6",
+  "#06b6d4",
+  "#3b82f6",
+  "#6366f1",
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -253,18 +270,12 @@ export function addMember(
 /**
  * Remove a member from a workspace.
  */
-export function removeMember(
-  workspaceId: string,
-  memberName: string,
-  removedBy: string,
-): boolean {
+export function removeMember(workspaceId: string, memberName: string, removedBy: string): boolean {
   const workspaces = loadWorkspaces();
   const workspace = workspaces.find((w) => w.id === workspaceId);
   if (!workspace) return false;
 
-  const member = workspace.members.find(
-    (m) => m.name.toLowerCase() === memberName.toLowerCase(),
-  );
+  const member = workspace.members.find((m) => m.name.toLowerCase() === memberName.toLowerCase());
   if (!member || member.role === "owner") return false;
 
   workspace.members = workspace.members.filter(
@@ -295,9 +306,7 @@ export function updateMemberRole(
   const workspace = workspaces.find((w) => w.id === workspaceId);
   if (!workspace) return false;
 
-  const member = workspace.members.find(
-    (m) => m.name.toLowerCase() === memberName.toLowerCase(),
-  );
+  const member = workspace.members.find((m) => m.name.toLowerCase() === memberName.toLowerCase());
   if (!member || member.role === "owner") return false;
 
   member.role = newRole;
@@ -313,9 +322,7 @@ export function updateMemberRole(
 export function isMember(workspaceId: string, name: string): WorkspaceMember | null {
   const workspace = getWorkspace(workspaceId);
   if (!workspace) return null;
-  return (
-    workspace.members.find((m) => m.name.toLowerCase() === name.toLowerCase()) ?? null
-  );
+  return workspace.members.find((m) => m.name.toLowerCase() === name.toLowerCase()) ?? null;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -354,18 +361,13 @@ export function shareCollection(
 /**
  * Unshare a collection from a workspace.
  */
-export function unshareCollection(
-  workspaceId: string,
-  collectionId: string,
-): boolean {
+export function unshareCollection(workspaceId: string, collectionId: string): boolean {
   const workspaces = loadWorkspaces();
   const workspace = workspaces.find((w) => w.id === workspaceId);
   if (!workspace) return false;
 
   const before = workspace.sharedCollections.length;
-  workspace.sharedCollections = workspace.sharedCollections.filter(
-    (id) => id !== collectionId,
-  );
+  workspace.sharedCollections = workspace.sharedCollections.filter((id) => id !== collectionId);
   if (workspace.sharedCollections.length === before) return false;
 
   workspace.updatedAt = new Date().toISOString();
@@ -420,10 +422,7 @@ export function logActivity(
 /**
  * Get recent activity for a workspace.
  */
-export function getRecentActivity(
-  workspaceId: string,
-  limit: number = 20,
-): WorkspaceActivity[] {
+export function getRecentActivity(workspaceId: string, limit: number = 20): WorkspaceActivity[] {
   const workspace = getWorkspace(workspaceId);
   if (!workspace) return [];
   return workspace.activity
@@ -443,9 +442,7 @@ export function searchWorkspaces(query: string): WorkspaceSummary[] {
   const lower = query.toLowerCase();
   return loadWorkspaces()
     .filter(
-      (w) =>
-        w.name.toLowerCase().includes(lower) ||
-        w.description.toLowerCase().includes(lower),
+      (w) => w.name.toLowerCase().includes(lower) || w.description.toLowerCase().includes(lower),
     )
     .map(({ members, activity, sharedCollections, ...rest }) => ({
       ...rest,

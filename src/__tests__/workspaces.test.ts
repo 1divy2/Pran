@@ -21,10 +21,18 @@ import {
 const store: Record<string, string> = {};
 const mockStorage = {
   getItem: vi.fn((key: string) => store[key] ?? null),
-  setItem: vi.fn((key: string, value: string) => { store[key] = value; }),
-  removeItem: vi.fn((key: string) => { delete store[key]; }),
-  clear: vi.fn(() => { for (const k of Object.keys(store)) delete store[k]; }),
-  get length() { return Object.keys(store).length; },
+  setItem: vi.fn((key: string, value: string) => {
+    store[key] = value;
+  }),
+  removeItem: vi.fn((key: string) => {
+    delete store[key];
+  }),
+  clear: vi.fn(() => {
+    for (const k of Object.keys(store)) delete store[k];
+  }),
+  get length() {
+    return Object.keys(store).length;
+  },
   key: vi.fn((index: number) => Object.keys(store)[index] ?? null),
 };
 
@@ -112,7 +120,7 @@ describe("Team Workspaces", () => {
   describe("addMember", () => {
     it("adds a member with default role", () => {
       const ws = createWorkspace("Team", "Alice");
-      const member = addMember(ws.id, "Bob");
+      const member = addMember(ws.id, "Bob", "member", "Alice");
       expect(member).not.toBeNull();
       expect(member!.name).toBe("Bob");
       expect(member!.role).toBe("member");
@@ -123,7 +131,7 @@ describe("Team Workspaces", () => {
 
     it("adds with specific role", () => {
       const ws = createWorkspace("Team", "Alice");
-      addMember(ws.id, "Bob", "admin");
+      addMember(ws.id, "Bob", "admin", "Alice");
       const reloaded = getWorkspace(ws.id);
       expect(reloaded!.members[1].role).toBe("admin");
     });
@@ -138,22 +146,22 @@ describe("Team Workspaces", () => {
 
     it("rejects duplicate members", () => {
       const ws = createWorkspace("Team", "Alice");
-      addMember(ws.id, "Bob");
-      const dup = addMember(ws.id, "Bob");
-      expect(dup).not.toBeNull(); // Returns existing member
+      addMember(ws.id, "Bob", "member", "Alice");
+      const dup = addMember(ws.id, "Bob", "member", "Alice");
+      expect(dup).not.toBeNull();
       const reloaded = getWorkspace(ws.id);
       expect(reloaded!.members.length).toBe(2);
     });
 
     it("returns null for unknown workspace", () => {
-      expect(addMember("nonexistent", "Bob")).toBeNull();
+      expect(addMember("nonexistent", "Bob", "member", "Alice")).toBeNull();
     });
   });
 
   describe("removeMember", () => {
     it("removes a member", () => {
       const ws = createWorkspace("Team", "Alice");
-      addMember(ws.id, "Bob");
+      addMember(ws.id, "Bob", "member", "Alice");
       expect(removeMember(ws.id, "Bob", "Alice")).toBe(true);
       const reloaded = getWorkspace(ws.id);
       expect(reloaded!.members.length).toBe(1);
@@ -166,7 +174,7 @@ describe("Team Workspaces", () => {
 
     it("logs activity", () => {
       const ws = createWorkspace("Team", "Alice");
-      addMember(ws.id, "Bob");
+      addMember(ws.id, "Bob", "member", "Alice");
       removeMember(ws.id, "Bob", "Alice");
       const reloaded = getWorkspace(ws.id);
       const removeActivity = reloaded!.activity.find((a) => a.type === "member_removed");
@@ -182,7 +190,7 @@ describe("Team Workspaces", () => {
   describe("updateMemberRole", () => {
     it("updates a member's role", () => {
       const ws = createWorkspace("Team", "Alice");
-      addMember(ws.id, "Bob");
+      addMember(ws.id, "Bob", "member", "Alice");
       expect(updateMemberRole(ws.id, "Bob", "admin")).toBe(true);
       const reloaded = getWorkspace(ws.id);
       expect(reloaded!.members[1].role).toBe("admin");
@@ -269,7 +277,7 @@ describe("Team Workspaces", () => {
     it("caps at 100 activities", () => {
       const ws = createWorkspace("Team", "Alice");
       for (let i = 0; i < 110; i++) {
-        logActivity(ws.id, "note", "Alice", `Activity ${i}`);
+        logActivity(ws.id, "annotation_added", "Alice", `Activity ${i}`);
       }
       const reloaded = getWorkspace(ws.id);
       expect(reloaded!.activity.length).toBe(100);
@@ -291,7 +299,7 @@ describe("Team Workspaces", () => {
     it("respects limit", () => {
       const ws = createWorkspace("Team", "Alice");
       for (let i = 0; i < 5; i++) {
-        logActivity(ws.id, "note", "Alice", `Act ${i}`);
+        logActivity(ws.id, "annotation_added", "Alice", `Act ${i}`);
       }
       expect(getRecentActivity(ws.id, 2).length).toBe(2);
     });
@@ -320,7 +328,7 @@ describe("Team Workspaces", () => {
     it("finds workspaces for a member", () => {
       const ws1 = createWorkspace("A", "Alice");
       const ws2 = createWorkspace("B", "Bob");
-      addMember(ws2.id, "Alice");
+      addMember(ws2.id, "Alice", "member", "Bob");
 
       const results = getWorkspacesForMember("Alice");
       expect(results.length).toBe(2);
