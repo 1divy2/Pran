@@ -70,7 +70,7 @@
 
 ### Phase 10 — Collaboration
 - [x] Evidence collections — save, organize, annotate, tag, rate, and export evidence sets
-- [ ] Shareable topic reports (export to PDF/Markdown)
+- [x] Shareable topic reports (export to Markdown with executive summary, quality breakdown, timeline, recommendations)
 - [ ] Annotation and notes on evidence pieces
 - [ ] Team workspaces with shared collections
 
