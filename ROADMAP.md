@@ -65,7 +65,7 @@
 ### Phase 9 — Data Enrichment
 - [x] Batch ingestion pipeline (concurrency control, progress tracking, error resilience)
 - [x] WHO, NICE, CDC guideline repository adapters
-- [ ] LLM-powered evidence tier classification (replacing keyword heuristics)
+- [x] Enhanced rule-based tier classifier (methodology-aware, 50+ patterns, confidence scoring)
 - [ ] Full abstract NLP (sample size extraction from tables, methodology classification)
 
 ### Phase 10 — Collaboration
