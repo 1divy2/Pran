@@ -1,0 +1,6 @@
+name = "pran"
+pages_build_output_dir = "dist"
+
+compatibility_date = "2026-06-19"
+
+[env.production]
