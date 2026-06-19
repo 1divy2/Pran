@@ -16,6 +16,9 @@ dist-ssr
 .nitro
 *.local
 .env
+.agent/
+.opencode/
+AGENTS.md
 
 # Wrangler / Cloudflare
 .wrangler/

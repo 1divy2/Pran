@@ -23,12 +23,12 @@
 │   ├─ styles.css        # Global CSS
 │   └─ router.tsx        # Router entry point
 ├─ .agent/                # UI‑UX‑Pro‑Max skill assets
-├─ .opencode/            # Duplicate UI‑UX‑Pro‑Max assets (ignored by build)
+
 ├─ bunfig.toml            # Bun configuration
 ├─ bun.lock               # Lock file
 ├─ package.json           # Scripts, dependencies
 ├─ tsconfig.json          # TypeScript config
-└─ vite.config.ts        # Vite configuration (minimal, no Lovable plugins)
+└─ vite.config.ts        # Vite configuration
 ```
 
 ## Key Dependencies
@@ -40,7 +40,7 @@
 
 ## Findings
 
-- No remaining Lovable‑specific packages or config entries.
+- No remaining proprietary scaffolding packages or config entries.
 - All source files compile without TypeScript errors.
 - Lint passes with only non‑blocking warnings.
 - No dead code detected by the current lint run.

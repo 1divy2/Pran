@@ -2,7 +2,7 @@
 
 ## Phase 0 — Documentation & Cleanup ✅
 
-- [x] Remove all Lovable artifacts
+- [x] Remove legacy scaffolding artifacts
 - [x] Create AUDIT.md, ARCHITECTURE.md, TECHNICAL_DEBT.md
 - [x] Establish CI workflow
 - [x] Document product identity and design system

@@ -36,7 +36,7 @@ Pran is a **single‑page web application** built with **React** and **TanStack 
 
 ## Notable Architectural Decisions
 
-- **Framework‑agnostic**: No Lovable or proprietary scaffolding; pure React/TanStack.
+- **Framework‑agnostic**: Pure React/TanStack; no proprietary scaffolding.
 - **Type‑safe**: All public APIs are typed; lint and TypeScript enforce contracts.
 - **Modular**: Clear separation of UI, hooks, and business logic for easier replacement of data sources.
 
