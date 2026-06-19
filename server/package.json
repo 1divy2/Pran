@@ -1,0 +1,21 @@
+{
+  "name": "pran-server",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch server/index.ts",
+    "build": "tsc server/index.ts --outDir dist/server",
+    "start": "node dist/server/index.js",
+    "db:migrate": "tsx server/cli.ts migrate",
+    "db:rollback": "tsx server/cli.ts rollback",
+    "db:status": "tsx server/cli.ts status",
+    "worker:start": "tsx server/worker-cli.ts start"
+  },
+  "dependencies": {
+    "pg": "^8.13.0",
+    "@types/pg": "^8.11.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0"
+  }
+}
