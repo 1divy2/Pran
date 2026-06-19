@@ -97,4 +97,8 @@
 - [ ] Server-side rendering for SEO
 - [ ] Background ingestion workers
 - [ ] Database persistence (PostgreSQL + pgvector)
-- [ ] API rate limit dashboard
+- [x] API rate limit dashboard (real-time stats, per-source breakdown)
+- [x] Error monitoring dashboard (structured capture, source filtering, stack traces)
+- [x] Data export/import (JSON backup, migration, merge on import)
+- [x] LLM configuration UI (provider selection, API key management)
+- [x] Admin settings page (storage stats, quick links)
