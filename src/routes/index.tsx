@@ -92,7 +92,7 @@ function LandingPage() {
 
         {/* Global Search Bar */}
         <section className="relative mx-auto w-full max-w-3xl mb-24">
-          <div className="relative overflow-hidden rounded-2xl bg-card shadow-lift hairline-strong transition-shadow focus-within:shadow-2xl">
+          <div className="relative overflow-hidden rounded-2xl bg-card hairline-strong" style={{ boxShadow: "var(--shadow-lift)" }}>
             <span className="absolute inset-y-0 left-6 flex items-center font-display text-2xl text-ink-3">
               ⌕
             </span>

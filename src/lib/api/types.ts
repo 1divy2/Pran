@@ -5,6 +5,8 @@
 // the existing contract — just fill in the optional fields it provides.
 // ─────────────────────────────────────────────────────────────────────────────
 
+import type { NormalizedEvidence } from "../ingestion/types";
+
 /** A clinical trial from ClinicalTrials.gov APIv2 */
 export interface Trial {
   nctId: string;
@@ -67,6 +69,9 @@ export interface LiveTopicData {
 
   /** Adverse event report count from FAERS */
   adverseEventCount: number;
+
+  /** Full normalized evidence (avoids double-conversion for downstream views) */
+  evidence: NormalizedEvidence[];
 
   /** Unix ms timestamp of when this was fetched */
   fetchedAt: number;

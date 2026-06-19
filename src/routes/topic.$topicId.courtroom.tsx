@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Workstation } from "@/components/pran/Workstation";
 import { fetchTopicData } from "@/lib/api/topic-service";
 import type { LiveTopicData } from "@/lib/api/types";
-import { paperToEvidence, trialToEvidence, tierMeta, type EvidencePiece } from "@/lib/evidence";
+import { tierMeta, computeConfidence, type EvidencePiece } from "@/lib/evidence";
+import type { NormalizedEvidence } from "@/lib/ingestion/types";
 
 export const Route = createFileRoute("/topic/$topicId/courtroom")({
   head: ({ params }) => ({ meta: [{ title: `Pran — Courtroom · ${params.topicId}` }] }),
@@ -20,46 +21,54 @@ interface Treatment {
 
 /** Select the two most-evidenced treatments for debate */
 function selectDebaters(data: LiveTopicData): [Treatment, Treatment] | null {
-  // Group evidence by intervention
+  // Group evidence by intervention name
   const byIntervention = new Map<string, EvidencePiece[]>();
 
-  // Add drug evidence
-  for (const drug of data.drugs) {
-    const key = drug.brand.toLowerCase();
-    if (!byIntervention.has(key)) byIntervention.set(key, []);
-    byIntervention.get(key)!.push({
-      id: `fda-${drug.generic}`,
-      title: `${drug.brand} (${drug.generic})`,
-      tier: "cohort",
-      year: null,
-      source: "OpenFDA",
-      authors: drug.manufacturer,
-      journal: drug.indication || "Drug Label",
-      n: null,
-      effect: drug.indication,
-      confidence: 60,
-      url: `https://open.fda.gov/drug/label/#${encodeURIComponent(drug.generic)}`,
-      abstract: "",
-    });
+  // Convert normalized evidence to EvidencePiece
+  function toPiece(ne: NormalizedEvidence): EvidencePiece {
+    return {
+      id: ne.id,
+      title: ne.title,
+      tier: ne.tier,
+      year: ne.year,
+      source: ne.sourceName,
+      authors: ne.authors,
+      journal: ne.journal,
+      n: ne.sampleSize,
+      effect: ne.effect,
+      confidence: computeConfidence({ tier: ne.tier, year: ne.year, n: ne.sampleSize }),
+      url: ne.url,
+      abstract: ne.abstract,
+    };
   }
 
-  // Add trial evidence (group by interventions)
-  for (const trial of data.trials.items) {
-    for (const intervention of trial.interventions.slice(0, 2)) {
-      const key = intervention.toLowerCase();
+  // Add drug evidence (OpenFDA records have interventions from the generic name)
+  for (const ne of data.evidence) {
+    if (ne.sourceId === "openfda") {
+      const key = ne.title.toLowerCase().split(" (")[0];
       if (!byIntervention.has(key)) byIntervention.set(key, []);
-      byIntervention.get(key)!.push(trialToEvidence(trial));
+      byIntervention.get(key)!.push(toPiece(ne));
     }
   }
 
-  // Add paper evidence (extract interventions from titles)
-  for (const paper of data.papers.items.slice(0, 20)) {
-    const evidence = paperToEvidence(paper);
-    // Simple heuristic: if title mentions a treatment keyword, group it
-    const title = paper.title.toLowerCase();
+  // Add trial evidence (group by interventions)
+  for (const ne of data.evidence) {
+    if (ne.sourceId === "clinicaltrials") {
+      for (const intervention of ne.interventions.slice(0, 2)) {
+        const key = intervention.toLowerCase();
+        if (!byIntervention.has(key)) byIntervention.set(key, []);
+        byIntervention.get(key)!.push(toPiece(ne));
+      }
+    }
+  }
+
+  // Add paper evidence (group by matching intervention keywords in title)
+  const paperEvidence = data.evidence.filter((ne) => ne.sourceId === "pubmed");
+  for (const ne of paperEvidence) {
+    const title = ne.title.toLowerCase();
     for (const [key] of byIntervention) {
       if (title.includes(key)) {
-        byIntervention.get(key)!.push(evidence);
+        byIntervention.get(key)!.push(toPiece(ne));
         break;
       }
     }

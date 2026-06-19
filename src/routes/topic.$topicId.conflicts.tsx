@@ -3,12 +3,12 @@ import { Workstation } from "@/components/pran/Workstation";
 import { fetchTopicData } from "@/lib/api/topic-service";
 import type { LiveTopicData } from "@/lib/api/types";
 import {
-  paperToEvidence,
-  trialToEvidence,
   tierMeta,
+  computeConfidence,
   type EvidencePiece,
   type EvidenceConflict,
 } from "@/lib/evidence";
+import type { NormalizedEvidence } from "@/lib/ingestion/types";
 
 export const Route = createFileRoute("/topic/$topicId/conflicts")({
   head: ({ params }) => ({ meta: [{ title: `Pran — Conflicts · ${params.topicId}` }] }),
@@ -132,21 +132,33 @@ function ConflictsPage() {
   const { topicId } = Route.useParams();
   const displayName = topicId.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
-  // Convert to evidence pieces
-  const paperEvidence = data.papers.items.map(paperToEvidence);
-  const trialEvidence = data.trials.items.map(trialToEvidence);
-  const allEvidence = [...paperEvidence, ...trialEvidence];
+  // Use normalized evidence directly (avoids double-conversion)
+  const allEvidence: EvidencePiece[] = data.evidence.map((ne) => ({
+    id: ne.id,
+    title: ne.title,
+    tier: ne.tier,
+    year: ne.year,
+    source: ne.sourceName,
+    authors: ne.authors,
+    journal: ne.journal,
+    n: ne.sampleSize,
+    effect: ne.effect,
+    confidence: computeConfidence({ tier: ne.tier, year: ne.year, n: ne.sampleSize }),
+    url: ne.url,
+    abstract: ne.abstract,
+  }));
 
   // Detect conflicts
   const conflicts = detectConflicts(allEvidence);
 
   // Find halted/terminated trials (separate category)
-  const haltedTrials = data.trials.items.filter(
-    (t) =>
-      t.status === "TERMINATED" ||
-      t.status === "SUSPENDED" ||
-      t.status === "WITHDRAWN" ||
-      t.status === "ACTIVE_NOT_RECRUITING",
+  const haltedTrials = data.evidence.filter(
+    (ne) =>
+      ne.sourceId === "clinicaltrials" &&
+      (ne.status === "TERMINATED" ||
+        ne.status === "SUSPENDED" ||
+        ne.status === "WITHDRAWN" ||
+        ne.status === "ACTIVE_NOT_RECRUITING"),
   );
 
   return (
@@ -211,7 +223,7 @@ function ConflictsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {haltedTrials.map((t) => (
                 <a
-                  key={t.nctId}
+                  key={t.id}
                   href={t.url}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -228,23 +240,23 @@ function ConflictsPage() {
                       }`}
                     />
                     <span className="font-mono text-[10px] uppercase font-bold tracking-widest text-ink-3">
-                      {t.status.replace(/_/g, " ")}
+                      {(t.status ?? "UNKNOWN").replace(/_/g, " ")}
                     </span>
                   </div>
                   <div className="font-display text-lg leading-snug group-hover:text-accent transition-colors line-clamp-2">
                     {t.title}
                   </div>
                   <div className="mt-3 text-sm text-ink-2">
-                    <span className="font-bold">Sponsor:</span> {t.sponsor}
+                    <span className="font-bold">Sponsor:</span> {t.authors}
                   </div>
                   <div className="mt-1 text-sm text-ink-2">
                     <span className="font-bold">Phase:</span>{" "}
-                    {t.phase !== "N/A" ? t.phase.replace("PHASE", "Phase ") : "Unknown"}
+                    {(t.rawMetadata.phase as string) !== "N/A" ? ((t.rawMetadata.phase as string) ?? "Unknown").replace("PHASE", "Phase ") : "Unknown"}
                   </div>
-                  {t.enrollment && (
+                  {t.sampleSize && (
                     <div className="mt-1 text-sm text-ink-2">
                       <span className="font-bold">Enrollment:</span> n ={" "}
-                      {t.enrollment.toLocaleString()}
+                      {t.sampleSize.toLocaleString()}
                     </div>
                   )}
                 </a>

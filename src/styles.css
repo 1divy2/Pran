@@ -60,14 +60,14 @@
   --color-consensus: var(--consensus);
 
   --shadow-paper:
-    0 1px 0 0 color-mix(in oklab, var(--ink) 4%, transparent),
-    0 8px 24px -16px color-mix(in oklab, var(--ink) 18%, transparent);
+    0 1px 0 0 oklch(0.18 0.012 250 / 0.04),
+    0 8px 24px -16px oklch(0.18 0.012 250 / 0.18);
   --shadow-lift:
-    0 1px 0 0 color-mix(in oklab, var(--ink) 5%, transparent),
-    0 24px 64px -28px color-mix(in oklab, var(--ink) 24%, transparent);
+    0 1px 0 0 oklch(0.18 0.012 250 / 0.05),
+    0 24px 64px -28px oklch(0.18 0.012 250 / 0.24);
   --shadow-dock:
-    0 24px 60px -20px color-mix(in oklab, var(--ink) 35%, transparent),
-    0 2px 0 0 color-mix(in oklab, var(--ink) 8%, transparent);
+    0 24px 60px -20px oklch(0.18 0.012 250 / 0.35),
+    0 2px 0 0 oklch(0.18 0.012 250 / 0.08);
 }
 
 :root {
@@ -144,6 +144,16 @@
   --tier-cohort: oklch(0.7 0.08 235);
   --tier-case: oklch(0.55 0.01 80);
   --tier-guide: oklch(0.72 0.1 165);
+
+  --shadow-paper:
+    0 1px 0 0 oklch(0.96 0.005 80 / 0.04),
+    0 8px 24px -16px oklch(0.96 0.005 80 / 0.18);
+  --shadow-lift:
+    0 1px 0 0 oklch(0.96 0.005 80 / 0.05),
+    0 24px 64px -28px oklch(0.96 0.005 80 / 0.24);
+  --shadow-dock:
+    0 24px 60px -20px oklch(0.96 0.005 80 / 0.35),
+    0 2px 0 0 oklch(0.96 0.005 80 / 0.08);
 }
 
 @layer base {

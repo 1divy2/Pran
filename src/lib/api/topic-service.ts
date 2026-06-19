@@ -35,7 +35,7 @@ export async function fetchTopicData(topicId: string): Promise<LiveTopicData> {
 
   let result: IngestionResult;
   try {
-    result = await ingestAll({ term: query, limit: 10 });
+    result = await ingestAll({ term: query, limit: 50 });
   } catch (error) {
     logError(error, "ingestion", { query, source: "topic-service" });
     // Return empty result on failure
@@ -65,10 +65,11 @@ export async function fetchTopicData(topicId: string): Promise<LiveTopicData> {
 
   const liveData: LiveTopicData = {
     query,
-    trials: { total: result.totalCount, items: trials },
-    papers: { total: result.totalCount, items: papers },
+    trials: { total: trials.length, items: trials },
+    papers: { total: papers.length, items: papers },
     drugs,
     adverseEventCount,
+    evidence: result.items,
     fetchedAt: Date.now(),
   };
 
@@ -104,7 +105,7 @@ export async function fetchNormalizedTopicData(topicId: string): Promise<Normali
 
   let result: IngestionResult;
   try {
-    result = await ingestAll({ term: query, limit: 10 });
+    result = await ingestAll({ term: query, limit: 50 });
   } catch (error) {
     logError(error, "ingestion", { query, source: "topic-service-normalized" });
     result = {

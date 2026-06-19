@@ -32,6 +32,24 @@ interface ESummaryResult {
   >;
 }
 
+interface EFetchArticle {
+  PubmedArticle: {
+    MedlineCitation: {
+      PMID: { _: string };
+      Article: {
+        ArticleTitle: { _: string } | string;
+        Abstract?: {
+          AbstractText?: { _: string; $: { Label?: string } }[] | string;
+        };
+        AuthorList?: {
+          Author: { ForeName?: string; LastName?: string }[];
+        };
+        Journal?: { Title: string; JournalIssue?: { PubDate?: { Year?: string } } };
+      };
+    };
+  };
+}
+
 export const pubmedAdapter: DataSourceAdapter = {
   id: "pubmed",
   name: "PubMed / NCBI E-utilities",
@@ -85,6 +103,37 @@ export const pubmedAdapter: DataSourceAdapter = {
 
       const summaryData = (await summaryRes.json()) as ESummaryResult;
 
+      // Step 3: Fetch abstracts via efetch (XML)
+      const abstracts = new Map<string, string>();
+      try {
+        const efetchUrl =
+          `${BASE}/efetch.fcgi?db=pubmed&id=${ids.join(",")}&rettype=abstract&retmode=xml${apiKeyParam()}`;
+        const efetchRes = await fetch(efetchUrl);
+        if (efetchRes.ok) {
+          const xmlText = await efetchRes.text();
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(xmlText, "text/xml");
+          const articles = doc.querySelectorAll("PubmedArticle");
+          for (const article of articles) {
+            const pmidEl = article.querySelector("PMID");
+            const pmid = pmidEl?.textContent;
+            if (!pmid) continue;
+            const abstractEls = article.querySelectorAll("AbstractText");
+            const parts: string[] = [];
+            for (const el of abstractEls) {
+              const label = el.getAttribute("Label");
+              if (label) parts.push(`${label}: ${el.textContent ?? ""}`);
+              else parts.push(el.textContent ?? "");
+            }
+            if (parts.length > 0) {
+              abstracts.set(pmid, parts.join(" "));
+            }
+          }
+        }
+      } catch {
+        // Abstract fetch is best-effort
+      }
+
       const items: NormalizedEvidence[] = ids
         .filter((id) => summaryData.result[id])
         .map((id) => {
@@ -108,7 +157,7 @@ export const pubmedAdapter: DataSourceAdapter = {
             journal: r.fulljournalname ?? r.source ?? "Unknown journal",
             sampleSize: null,
             effect: null,
-            abstract: "",
+            abstract: abstracts.get(id) ?? "",
             url: `https://pubmed.ncbi.nlm.nih.gov/${id}/`,
             conditions: [query.term],
             interventions: [],

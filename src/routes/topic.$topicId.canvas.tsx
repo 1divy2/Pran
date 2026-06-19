@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Workstation } from "@/components/pran/Workstation";
 import { fetchTopicData } from "@/lib/api/topic-service";
 import type { LiveTopicData } from "@/lib/api/types";
-import { paperToEvidence, trialToEvidence, tierMeta, type EvidencePiece } from "@/lib/evidence";
+import { tierMeta, computeConfidence, type EvidencePiece } from "@/lib/evidence";
 
 export const Route = createFileRoute("/topic/$topicId/canvas")({
   head: ({ params }) => ({
@@ -38,27 +38,29 @@ function CanvasPage() {
   const { topicId } = Route.useParams();
   const displayName = topicId.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
-  // Convert to evidence pieces and position them
-  const nodes: CanvasNode[] = [
-    ...data.trials.items.map((t) => {
-      const evidence = trialToEvidence(t);
-      const rng = seededRandom(evidence.id);
-      return {
-        evidence,
-        x: (rng() % 80) + 10,
-        y: ((rng() >> 8) % 40) + 10,
-      };
-    }),
-    ...data.papers.items.map((p) => {
-      const evidence = paperToEvidence(p);
-      const rng = seededRandom(evidence.id);
-      return {
-        evidence,
-        x: (rng() % 80) + 10,
-        y: ((rng() >> 8) % 30) + 50,
-      };
-    }),
-  ];
+  // Use normalized evidence directly (avoids double-conversion)
+  const nodes: CanvasNode[] = data.evidence.map((ne) => {
+    const evidence: EvidencePiece = {
+      id: ne.id,
+      title: ne.title,
+      tier: ne.tier,
+      year: ne.year,
+      source: ne.sourceName,
+      authors: ne.authors,
+      journal: ne.journal,
+      n: ne.sampleSize,
+      effect: ne.effect,
+      confidence: computeConfidence({ tier: ne.tier, year: ne.year, n: ne.sampleSize }),
+      url: ne.url,
+      abstract: ne.abstract,
+    };
+    const rng = seededRandom(evidence.id);
+    return {
+      evidence,
+      x: (rng() % 80) + 10,
+      y: (ne.sourceId === "clinicaltrials" ? (rng() >> 8) % 40 + 10 : (rng() >> 8) % 30 + 50),
+    };
+  });
 
   const [activeId, setActiveId] = useState<string | null>(nodes[0]?.evidence.id ?? null);
   const activeNode = nodes.find((n) => n.evidence.id === activeId);
@@ -152,26 +154,28 @@ function CanvasPage() {
           })}
 
           {/* Drugs strip along the bottom */}
-          {data.drugs.length > 0 && (
+          {data.evidence.filter((ne) => ne.sourceId === "openfda").length > 0 && (
             <div className="absolute inset-x-0 bottom-24 px-12">
               <div className="mono-eyebrow mb-3">FDA Approved Interventions</div>
               <div className="flex gap-3 overflow-x-auto pb-4">
-                {data.drugs.slice(0, 8).map((d, i) => (
-                  <div
-                    key={i}
-                    className="min-w-[200px] shrink-0 rounded-md bg-card/90 p-3 backdrop-blur hairline-strong"
-                  >
-                    <div className="flex items-baseline justify-between">
-                      <span className="font-display text-xl">{d.brand}</span>
+                {data.evidence.filter((ne) => ne.sourceId === "openfda").slice(0, 8).map((ne, i) => {
+                  const brand = ne.title.split(" (")[0];
+                  const generic = ne.title.includes("(") ? ne.title.split("(")[1].replace(")", "").trim() : ne.title;
+                  return (
+                    <div
+                      key={i}
+                      className="min-w-[200px] shrink-0 rounded-md bg-card/90 p-3 backdrop-blur hairline-strong"
+                    >
+                      <div className="flex items-baseline justify-between">
+                        <span className="font-display text-xl">{brand}</span>
+                      </div>
+                      <div className="mt-1 font-mono text-[10px] uppercase text-ink-3 tracking-widest">
+                        {generic}
+                      </div>
+                      <div className="mt-2 text-xs text-ink-3 line-clamp-2">{ne.effect ?? "—"}</div>
                     </div>
-                    <div className="mt-1 font-mono text-[10px] uppercase text-ink-3 tracking-widest">
-                      {d.generic}
-                    </div>
-                    <div className="mt-2 text-[11px] leading-snug text-ink-2 line-clamp-3">
-                      {d.indication || "No indication details available."}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}

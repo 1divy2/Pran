@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Workstation } from "@/components/pran/Workstation";
 import { fetchTopicData } from "@/lib/api/topic-service";
 import type { LiveTopicData } from "@/lib/api/types";
-import { paperToEvidence, trialToEvidence, type EvidencePiece } from "@/lib/evidence";
+import { computeConfidence, type EvidencePiece } from "@/lib/evidence";
 
 export const Route = createFileRoute("/topic/$topicId/graph")({
   head: ({ params }) => ({ meta: [{ title: `Pran — Graph · ${params.topicId}` }] }),
@@ -74,40 +74,71 @@ function extractEntities(
     topicId.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
   );
 
+  const papers = data.evidence.filter((ne) => ne.sourceId === "pubmed");
+  const trials = data.evidence.filter((ne) => ne.sourceId === "clinicaltrials");
+  const drugs = data.evidence.filter((ne) => ne.sourceId === "openfda");
+
   // Papers → condition
-  for (const paper of data.papers.items.slice(0, 15)) {
-    const evidence = paperToEvidence(paper);
-    const paperId = `paper:${paper.pmid}`;
-    addNode(paperId, "paper", paper.title, evidence);
+  for (const ne of papers.slice(0, 15)) {
+    const evidence: EvidencePiece = {
+      id: ne.id,
+      title: ne.title,
+      tier: ne.tier,
+      year: ne.year,
+      source: ne.sourceName,
+      authors: ne.authors,
+      journal: ne.journal,
+      n: ne.sampleSize,
+      effect: ne.effect,
+      confidence: computeConfidence({ tier: ne.tier, year: ne.year, n: ne.sampleSize }),
+      url: ne.url,
+      abstract: ne.abstract,
+    };
+    const paperId = `paper:${ne.id}`;
+    addNode(paperId, "paper", ne.title, evidence);
     addEdge(paperId, conditionId, "studies");
 
     // Journal nodes
-    const journalId = `journal:${paper.journal}`;
-    addNode(journalId, "journal", paper.journal);
+    const journalId = `journal:${ne.journal}`;
+    addNode(journalId, "journal", ne.journal);
     addEdge(paperId, journalId, "published-in");
 
     // Author → sponsor nodes (first author as proxy)
-    if (paper.authors.length > 0) {
-      const sponsorId = `sponsor:${paper.authors[0]}`;
-      addNode(sponsorId, "sponsor", paper.authors[0]);
+    const author = ne.authors.split("; ")[0];
+    if (author) {
+      const sponsorId = `sponsor:${author}`;
+      addNode(sponsorId, "sponsor", author);
       addEdge(paperId, sponsorId, "authored-by");
     }
   }
 
   // Trials → condition
-  for (const trial of data.trials.items.slice(0, 15)) {
-    const evidence = trialToEvidence(trial);
-    const trialId = `trial:${trial.nctId}`;
-    addNode(trialId, "trial", trial.title, evidence);
+  for (const ne of trials.slice(0, 15)) {
+    const evidence: EvidencePiece = {
+      id: ne.id,
+      title: ne.title,
+      tier: ne.tier,
+      year: ne.year,
+      source: ne.sourceName,
+      authors: ne.authors,
+      journal: ne.journal,
+      n: ne.sampleSize,
+      effect: ne.effect,
+      confidence: computeConfidence({ tier: ne.tier, year: ne.year, n: ne.sampleSize }),
+      url: ne.url,
+      abstract: ne.abstract,
+    };
+    const trialId = `trial:${ne.id}`;
+    addNode(trialId, "trial", ne.title, evidence);
     addEdge(trialId, conditionId, "investigates");
 
     // Sponsor nodes
-    const sponsorId = `sponsor:${trial.sponsor}`;
-    addNode(sponsorId, "sponsor", trial.sponsor);
+    const sponsorId = `sponsor:${ne.authors}`;
+    addNode(sponsorId, "sponsor", ne.authors);
     addEdge(trialId, sponsorId, "sponsored-by");
 
     // Intervention nodes
-    for (const intervention of trial.interventions.slice(0, 3)) {
+    for (const intervention of ne.interventions.slice(0, 3)) {
       const interventionId = `intervention:${intervention}`;
       addNode(interventionId, "intervention", intervention);
       addEdge(trialId, interventionId, "tests");
@@ -116,9 +147,10 @@ function extractEntities(
   }
 
   // Drug nodes
-  for (const drug of data.drugs.slice(0, 8)) {
-    const drugId = `drug:${drug.generic}`;
-    addNode(drugId, "drug", `${drug.brand} (${drug.generic})`);
+  for (const ne of drugs.slice(0, 8)) {
+    const generic = ne.title.includes("(") ? ne.title.split("(")[1].replace(")", "").trim() : ne.title;
+    const drugId = `drug:${generic}`;
+    addNode(drugId, "drug", ne.title);
     addEdge(drugId, conditionId, "indicated-for");
   }
 
@@ -241,8 +273,12 @@ function GraphPage() {
   }
 
   // Stats
-  const sponsors = new Set(data.trials.items.map((t) => t.sponsor));
-  const journals = new Set(data.papers.items.map((p) => p.journal));
+  const sponsors = new Set(
+    data.evidence.filter((ne) => ne.sourceId === "clinicaltrials").map((ne) => ne.authors),
+  );
+  const journals = new Set(
+    data.evidence.filter((ne) => ne.sourceId === "pubmed").map((ne) => ne.journal),
+  );
 
   return (
     <Workstation
