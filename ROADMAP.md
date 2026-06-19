@@ -66,7 +66,7 @@
 - [x] Batch ingestion pipeline (concurrency control, progress tracking, error resilience)
 - [x] WHO, NICE, CDC guideline repository adapters
 - [x] Enhanced rule-based tier classifier (methodology-aware, 50+ patterns, confidence scoring)
-- [ ] Full abstract NLP (sample size extraction from tables, methodology classification)
+- [x] Full abstract NLP — methodology detection, interventions, outcomes, population, duration, arms, funding extraction
 
 ### Phase 10 — Collaboration
 - [ ] Evidence collections — save, organize, and export evidence sets
