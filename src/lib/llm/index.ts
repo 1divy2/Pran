@@ -2,6 +2,8 @@ import type { LLMAdapter, LLMConfig, LLMProvider } from "./types";
 import { OpenAIAdapter } from "./openai-adapter";
 import { AnthropicAdapter } from "./anthropic-adapter";
 
+export type { LLMConfig, LLMProvider, LLMAdapter } from "./types";
+
 let cachedAdapter: LLMAdapter | null = null;
 let cachedConfigHash: string | null = null;
 
