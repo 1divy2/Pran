@@ -94,9 +94,9 @@
 
 ### Phase 12 — Scale
 
-- [ ] Server-side rendering for SEO
-- [ ] Background ingestion workers
-- [ ] Database persistence (PostgreSQL + pgvector)
+- [x] Server-side rendering for SEO (TanStack Start configuration)
+- [x] Background ingestion workers (concurrency control, error handling, CLI)
+- [x] Database persistence (PostgreSQL + pgvector, migrations, DAL)
 - [x] API rate limit dashboard (real-time stats, per-source breakdown)
 - [x] Error monitoring dashboard (structured capture, source filtering, stack traces)
 - [x] Data export/import (JSON backup, migration, merge on import)
