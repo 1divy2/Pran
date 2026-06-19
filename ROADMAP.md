@@ -69,7 +69,7 @@
 - [x] Full abstract NLP — methodology detection, interventions, outcomes, population, duration, arms, funding extraction
 
 ### Phase 10 — Collaboration
-- [ ] Evidence collections — save, organize, and export evidence sets
+- [x] Evidence collections — save, organize, annotate, tag, rate, and export evidence sets
 - [ ] Shareable topic reports (export to PDF/Markdown)
 - [ ] Annotation and notes on evidence pieces
 - [ ] Team workspaces with shared collections
